@@ -58,13 +58,15 @@ You need to make sure the credentials you're using have the correct permissions 
 service. If you run into 'Access Denied' errors while running this sample, please follow the steps below.  
 确认你的 IAM user 有权限访问对应的对象存储.  
 
-* Google Cloud: Login to the Google Cloud Storage Console -> Setting -> Interoperability, Download a Service Account HMAC key or User Account HMAC key  在GCP GCS控制台 -> 设置 -> 互操作性 中下载 服务账号 HMAC 密钥或者用户账号 HMAC 密钥
+* Google Cloud: Login to the Google Cloud Storage Console -> Setting -> Interoperability, Download a Service Account HMAC key or User Account HMAC key   
+在GCP GCS控制台 -> 设置 -> 互操作性 中下载 服务账号 HMAC 密钥或者用户账号 HMAC 密钥
 
-* AWS: Login to the [AWS IAM Console](https://console.aws.amazon.com/iam/home) Navigate to the Users page. Find the AWS IAM user whose credentials you're using. Under the 'Permissions' section, attach the policy called 'AmazonS3FullAccess' 在AWS IAM控制台上下载 IAM 密钥   
+* AWS: Login to the [AWS IAM Console](https://console.aws.amazon.com/iam/home) Navigate to the Users page. Find the AWS IAM user whose credentials you're using. Under the 'Permissions' section, attach the policy called 'AmazonS3FullAccess'   
+在AWS IAM控制台上下载 IAM 密钥   
 
 * Copy aws_access_key_id and aws_secret_access_key of this user for below setting
 
-* Create file `"credentials"` in ~/.aws/ (`C:\Users\USER_NAME\.aws\` for Windows users) and save below content:  
+* Create file `"credentials"` in ~/.aws/ (`C:\Users\USER_NAME\.aws\` for Windows users) and save below content:   
 创建文件名为 `"credentials"` 于 ~/.aws/ 目录(`C:\Users\USER_NAME\.aws\` for Windows users) 并保存以下内容:
 ```
 [default]
