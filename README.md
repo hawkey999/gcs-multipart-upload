@@ -1,6 +1,6 @@
-# Object Storage MultiThread Resume Upload Tool (对象存储多线程断点续传)   
+# Cloud Storage Multipart Resume Upload Tool (云对象存储多线程断点续传)   
 
-Muliti-thread Object Storageupload tool, breaking-point resume supported, suitable for large files in parallel, support GCS/S3/OSS and others S3 compitable API  
+Muliti-thread with multi-part Cloud Storage upload tool, breaking-point resume supported, suitable for large files in parallel, support GCS/S3/OSS and others S3 compitable API  
 对象存储多线程断点续传，适合大批量的大文件传输，支持谷歌GCS/AWS S3/阿里OSS等各种S3兼容接口  
 
 ### Features:  
