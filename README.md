@@ -131,7 +131,8 @@ https://stackoverflow.com/questions/57400301/how-to-fix-tkinter-every-code-with-
 或不带 GUI 来运行 python3 s3_upload.py --nogui。Windows 操作系统没有反馈有该问题。  
 
 ### 实现中国大陆较稳定地网络访问GCS
-* 指定就近API地址。中国大陆可以直接访问到 GCS API(google cloud storage)，但很可能会解析到美国的API入口，本地 ping storage.googleapis.com 即可看到解析到哪个地址，以及时延。可以利用GCS API 全球分布的特性，在就近例如香港服务器上解析一个 nslookup storage.googleapis.com 的IP地址，然后写入到本地HOST文件中，以实现就近访问，加速上传。HOST文件示例如下：   
+* 指定就近API地址。中国大陆可以直接访问到 GCS API(google cloud storage)，但很可能会解析到美国的API入口，本地 ping storage.googleapis.com 即可看到解析到哪个地址，以及时延。可以利用GCS API 全球分布的特性，在就近例如香港服务器上解析一个 nslookup storage.googleapis.com 的IP地址，然后写入到本地HOST文件中，以实现就近访问，加速上传。注：API所在地跟Bucket所在区域并无必然关联，就近访问API可以利用GCP骨干网的优势。正常情况访问API是会自动调度到就近的入口的，但中国大陆情况特殊。  
+HOST文件示例如下：   
 ```
 sudo vi /etc/hosts
     <Specified_GCS_IP> storage.googleapis.com
