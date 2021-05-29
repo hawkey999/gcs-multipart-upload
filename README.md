@@ -1,16 +1,13 @@
-# Object Storage MultiThread Resume Upload Tool - Single Node (对象存储多线程断点续传 - 单机版)   
+# Object Storage MultiThread Resume Upload Tool (对象存储多线程断点续传)   
 
-Muliti-thread Object Storageupload tool, breaking-point resume supported, suitable for large files in parallel, support GCS/S3/OSS and others S3 compitable API
+Muliti-thread Object Storageupload tool, breaking-point resume supported, suitable for large files in parallel, support GCS/S3/OSS and others S3 compitable API  
 对象存储多线程断点续传，适合大批量的大文件传输，支持谷歌GCS/AWS S3/阿里OSS等各种S3兼容接口  
-
-Single Python file can run anywhere, suitable for one time transmission.  
-单个 Python 文件可在任何地方运行。适合一次性的搬迁工作。  
 
 ### Features:  
 具体功能包括：  
 
-* Split multipart and get from source, multi-thread upload to S3 and merge, support resume upload (Part level).   
-源文件的自动分片获取，多线程并发上传到目的S3再合并文件，断点续传(分片级别)。  
+* Split multipart and get from source, multi-thread upload to GCS/S3 and merge, support resume upload (Part level).   
+源文件的自动分片获取，多线程并发上传到目的GCS/S3再合并文件，断点续传(分片级别)。  
 
 * Support source: local files, Google Cloud Storage, Amazon S3, AliCloud OSS and any other S3 compatible API  
 支持的源：本地文件、谷歌Cloud Storage、Amazon S3、阿里云 OSS 和其他S3兼容接口  
@@ -36,12 +33,10 @@ Single Python file can run anywhere, suitable for one time transmission.
 * Can setup ouput info level  
 可设置输出消息级别，如设置WARNING级别，则只输出你最关注的信息。
 --------  
+## Architecture
+![arc](./img/img01.png)  
 
-## Architecture 架构图  
-1. Local upload to GCS/S3  
-2. Between GCS and S3  
-3. From AliCloud OSS to GCS/S3  
-  
+
 ## Installation  安装  
 
 ### Install Python3 & SDK (boto3)
@@ -132,31 +127,7 @@ python3 s3_upload.py --gui
 https://bugs.python.org/issue37833  
 https://stackoverflow.com/questions/57400301/how-to-fix-tkinter-every-code-with-gui-crashes-mac-os-with-respring    
 或不带 GUI 来运行 python3 s3_upload.py --nogui。Windows 操作系统没有反馈有该问题。  
-  
-* Windows non-Python Environment, and to run LOCAL_TO_S3 job, Run s3_upload.exe  
-Windows 非 Python 环境运行本地上传任务，运行 s3_upload.exe  
 
-![GUI Config](./img/img05.png)
-
-## DOWNLOAD - 下载
-### Config `s3_download_config.ini` or config in GUI
-
-### Start the download app - 运行下载应用
-* Python3 Environment and don't want to run with GUI, Linux/MacOS/Win  
-Python3 环境，且不需要GUI界面，运行在 Linux/MacOS/Win
-```bash
-python3 s3_download.py --nogui
-```
-
-* Python3 Environment and run with GUI. Linux/MacOS/Win  
-Python3 环境，且带GUI界面，运行在 Linux/MacOS/Win：
-```bash
-python3 s3_download.py --gui
-```
-部分 MacOS 版本的 Python 运行 GUI（ tkinter ）会出现 Mac WindowServer 端口冲突，导致 Mac 退出用户重新启动的情况。目前受限于 Python tkinter 与 MacOS，遇到这种情况，需要升级或降级 Python/tkinter 解决。参考：  
-https://bugs.python.org/issue37833  
-https://stackoverflow.com/questions/57400301/how-to-fix-tkinter-every-code-with-gui-crashes-mac-os-with-respring    
-或不带 GUI 来运行 python3 s3_download.py --nogui。Windows 操作系统没有反馈有该问题。  
 
 ### Known Issue  注意:  
 
