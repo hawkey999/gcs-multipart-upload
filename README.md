@@ -128,8 +128,16 @@ https://bugs.python.org/issue37833
 https://stackoverflow.com/questions/57400301/how-to-fix-tkinter-every-code-with-gui-crashes-mac-os-with-respring    
 或不带 GUI 来运行 python3 s3_upload.py --nogui。Windows 操作系统没有反馈有该问题。  
 
+### 实现中国大陆较稳定地网络访问GCS
+* 中国大陆可以直接访问到 GCS API(google cloud storage)，但很可能会解析到美国的API入口，本地 ping storage.googleapis.com 即可看到解析到哪个地址，以及时延。可以利用GCS API 全球分布的特性，在就近例如香港服务器上解析一个 nslookup storage.googleapis.com 的IP地址，然后写入到本地HOST文件中，以实现就近访问，加速上传。HOST文件示例如下：   
+```
+sudo vi /etc/hosts
+    <Specified_GCS_IP> storage.googleapis.com
+```
 
-### Known Issue  注意:  
+### NOTICE  注意:  
+* Server memory: MaxThread x MaxParallelFile x Chunksize is the temp memory needed for transmission  
+服务器内存： MaxThread x MaxParallelFile x Chunksize 是传输过程中需要占用的临时内存数  
 
 * While same file prefix/name with same size, it will be considered as duplicated file and this file will be ignore.
 This is a trade-off for performance. It might be improved in the coming release, with Verification Option.  
