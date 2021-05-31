@@ -44,13 +44,23 @@ Muliti-thread with multi-part Cloud Storage upload tool, breaking-point resume s
   
 
 2. Install SDK (boto3)  
-Install python sdk boto3. If you need to copy from AliCloud OSS, you need to install oss2 package as well.   
-该工具需要先安装 Python SDK [boto3](https://github.com/boto/boto3)，如果需要从阿里云OSS拷贝，则还需要安装阿里 SDK [oss2](https://github.com/aliyun/aliyun-oss-python-sdk)。  
+Install python sdk boto3.  
+该工具需要先安装 Python SDK [boto3](https://github.com/boto/boto3)  
 ```bash
     pip install -r requirements.txt --user
 ```
-注：此处没有使用阿里云OSS的S3兼容接口，而是使用OSS原生接口，主要是OSS不支持S3接口的path路径，而要改VirtualHost模式
 
+
+## Quick Start 快速使用  
+```bash
+python3 s3_upload.py --gui
+```
+用以上命令启动应用程序，如果没有设置过HMAC密钥，则按提示输入密钥 Access_key 和 Secret 如下图:    
+![credential](./img/img03.png)
+在图形界面上选择要上传的本地目录和目标Bucket/Prefix，并行文件数量，每个文件并发数量等。
+![GUI Config](./img/img04.png)
+
+## Detail Setup 详细设置  
 ### Setup Credential  
 
 1. Credential  
@@ -124,7 +134,7 @@ Python3 环境，且带GUI界面，运行在 Linux/MacOS/Win：
 ```bash
 python3 s3_upload.py --gui
 ```
-![GUI Config](./img/img04.png)
+
 部分 MacOS 版本的 Python 运行 GUI（ tkinter ）会出现 Mac WindowServer 端口冲突，导致 Mac 退出用户重新启动的情况。目前受限于 Python tkinter 与 MacOS，遇到这种情况，需要升级或降级 Python/tkinter 解决。参考：  
 https://bugs.python.org/issue37833  
 https://stackoverflow.com/questions/57400301/how-to-fix-tkinter-every-code-with-gui-crashes-mac-os-with-respring    
@@ -162,6 +172,9 @@ S3_TO_S3 场景，本项目不支持源桶 S3 版本控制，相同对象的不�
 If you don't want to see this case happen, you should enable ifverifymd5 = True , application will re-read the local file to calculate MD5 and compare with S3 Etag on every file complete transmisson. If it is not match, it will re-transmit.  
 LOCAL_TO_S3 场景，如果你在传输某个文件过程中覆盖了源文件，则文件完整性会被破坏，到所有文件传输结束后再对比的时候会发现文件Size不一致，并报告出来。  
 如果希望防止这种情况，应该启用 ifverifymd5 = True ，则会在传输完单个文件的时候，重新读取本地文件并计算MD5与S3上的Etag做对比，不一致则会重新传输。
+
+* 此处没有使用阿里云OSS的S3兼容接口，而是使用OSS原生接口，主要是OSS不支持S3接口的path路径，而要改VirtualHost模式
+如果需要从阿里云OSS拷贝，则还需要安装阿里 SDK [oss2](https://github.com/aliyun/aliyun-oss-python-sdk)
 
 ## License
 
