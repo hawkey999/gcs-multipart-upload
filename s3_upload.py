@@ -104,7 +104,7 @@ def set_config():
         pro_conf.read(cre_path)
         profile_list = pro_conf.sections()
     else:
-        print(f"There is no aws_access_key in {cre_path}, please input for Destination S3 Bucket: ")
+        print(f"There is no aws_access_key in {cre_path}, please input for Destination GCS/S3 Bucket: ")
         if not os.path.exists(pro_path):
             os.mkdir(pro_path)
         aws_access_key_id = input('GCS HMAC Access key(or aws_access_key_id): ')
@@ -421,16 +421,18 @@ def get_s3_file_list(*, s3_client, bucket, S3Prefix, no_prefix=False):
         # 目的bucket的 "prefix/"长度
         dp_len = len(S3Prefix) + 1
 
-    paginator = s3_client.get_paginator('list_objects_v2')
     __des_file_list = []
     try:
-        response_iterator = paginator.paginate(
-            Bucket=bucket,
-            Prefix=S3Prefix
-        )
-        for page in response_iterator:
-            if "Contents" in page:
-                for n in page["Contents"]:
+        Marker = ""
+        IsTruncated = True
+        while IsTruncated:
+            response = s3_client.list_objects(
+                Bucket=bucket,
+                Prefix=S3Prefix,
+                Marker=Marker
+            )
+            if "Contents" in response:
+                for n in response["Contents"]:
                     key = n["Key"]
                     if no_prefix:
                         key = key[dp_len:]
@@ -438,6 +440,9 @@ def get_s3_file_list(*, s3_client, bucket, S3Prefix, no_prefix=False):
                         "Key": key,
                         "Size": n["Size"]
                     })
+                if "NextMarker" in response:
+                    Marker = response["NextMarker"]
+            IsTruncated = response["IsTruncated"]
         logger.info(f'Bucket list length：{str(len(__des_file_list))}')
     except Exception as err:
         logger.error(str(err))
