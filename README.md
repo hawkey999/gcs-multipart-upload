@@ -43,9 +43,7 @@ Muliti-thread with multi-part Cloud Storage upload tool, breaking-point resume s
 1. Install [Python](https://www.python.org/downloads/) 3.6 or above  
   
 
-2. Install SDK (boto3)  
-Install python sdk boto3.  
-该工具需要先安装 Python SDK [boto3](https://github.com/boto/boto3)  
+2. Install SDK [boto3](https://github.com/boto/boto3)    
 ```bash
     pip install -r requirements.txt --user
 ```
