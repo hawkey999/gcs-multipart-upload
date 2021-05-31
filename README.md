@@ -55,10 +55,13 @@ Install python sdk boto3.
 ```bash
 python3 s3_upload.py --gui
 ```
-用以上命令启动应用程序，如果没有设置过HMAC密钥，则按提示输入密钥 Access_key 和 Secret 如下图:    
+Run above command. If you haven't input any HMAC key, then follow the hints to input Access_key/Secret:    
+用以上命令启动应用程序，如果没有设置过HMAC密钥，则按提示输入密钥 Access_key/Secret 如下图:    
 ![credential](./img/img03.png)
-在图形界面上选择要上传的本地目录和目标Bucket/Prefix，并行文件数量，每个文件并发数量等。
+On GUI, select local directory and target Bucket/Prefix, parallel upload file and concurrent threads per file.   
+在图形界面上，选择要上传的本地目录和目标Bucket/Prefix，并行文件数量，每个文件并发数量等。  
 ![GUI Config](./img/img04.png)
+Click "Start Upload" to start.  
 
 ## Detail Setup 详细设置  
 ### Setup Credential  
