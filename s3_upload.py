@@ -96,6 +96,30 @@ def set_config():
         input('PRESS ENTER TO QUIT')
         sys.exit(0)
 
+    # If no HMAC(access_key) credential
+    pro_conf = RawConfigParser()
+    pro_path = os.path.join(os.path.expanduser("~"), ".aws")
+    cre_path = os.path.join(pro_path, "credentials")
+    if os.path.exists(cre_path):
+        pro_conf.read(cre_path)
+        profile_list = pro_conf.sections()
+    else:
+        print(f"There is no aws_access_key in {cre_path}, please input for Destination S3 Bucket: ")
+        if not os.path.exists(pro_path):
+            os.mkdir(pro_path)
+        aws_access_key_id = input('GCS HMAC Access key(or aws_access_key_id): ')
+        aws_secret_access_key = input('GCS HMAC Secret(or aws_secret_access_key): ')
+        # region = input('region: ')
+        pro_conf.add_section('default')
+        pro_conf['default']['aws_access_key_id'] = aws_access_key_id
+        pro_conf['default']['aws_secret_access_key'] = aws_secret_access_key
+        # pro_conf['default']['region'] = region
+        profile_list = ['default']
+        with open(cre_path, 'w') as f:
+            print(f"Saving credentials to {cre_path}")
+            pro_conf.write(f)
+
+
     # GUI only well support LOCAL_TO_S3 mode, start with --gui option
     # For other JobTpe, GUI is not a prefer option since it's better run on EC2 Linux
     if gui:
@@ -103,26 +127,6 @@ def set_config():
         from tkinter import Tk, filedialog, END, StringVar, BooleanVar, messagebox
         from tkinter.ttk import Combobox, Label, Button, Entry, Spinbox, Checkbutton
         # get profile name list in ./aws/credentials
-        pro_conf = RawConfigParser()
-        pro_path = os.path.join(os.path.expanduser("~"), ".aws")
-        cre_path = os.path.join(pro_path, "credentials")
-        if os.path.exists(cre_path):
-            pro_conf.read(cre_path)
-            profile_list = pro_conf.sections()
-        else:
-            print(f"There is no aws_access_key in {cre_path}, please input for Destination S3 Bucket: ")
-            os.mkdir(pro_path)
-            aws_access_key_id = input('aws_access_key_id: ')
-            aws_secret_access_key = input('aws_secret_access_key: ')
-            region = input('region: ')
-            pro_conf.add_section('default')
-            pro_conf['default']['aws_access_key_id'] = aws_access_key_id
-            pro_conf['default']['aws_secret_access_key'] = aws_secret_access_key
-            pro_conf['default']['region'] = region
-            profile_list = ['default']
-            with open(cre_path, 'w') as f:
-                print(f"Saving credentials to {cre_path}")
-                pro_conf.write(f)
 
         # Click Select Folder
         def browse_folder():
@@ -242,7 +246,7 @@ def set_config():
         file_btn.grid(column=2, row=2, sticky='w', padx=2, pady=2)
         file_txt.insert(0, SrcFileIndex)
 
-        Label(window, text="AWS Profile").grid(column=0, row=3, sticky='w', padx=2, pady=2)
+        Label(window, text="Credential Profile").grid(column=0, row=3, sticky='w', padx=2, pady=2)
         DesProfileName_txt = Combobox(window, width=15, state="readonly")
         DesProfileName_txt['values'] = tuple(profile_list)
         DesProfileName_txt.grid(column=1, row=3, sticky='w', padx=2, pady=2)
@@ -254,7 +258,7 @@ def set_config():
         DesProfileName = DesProfileName_txt.get()
         DesProfileName_txt.bind("<<ComboboxSelected>>", ListBuckets)
 
-        Label(window, text="S3 Bucket").grid(column=0, row=4, sticky='w', padx=2, pady=2)
+        Label(window, text="Bucket").grid(column=0, row=4, sticky='w', padx=2, pady=2)
         DesBucket_txt = Combobox(window, width=48)
         DesBucket_txt.grid(column=1, row=4, sticky='w', padx=2, pady=2)
         DesBucket_txt['values'] = DesBucket
@@ -262,7 +266,7 @@ def set_config():
         Button(window, text="List Buckets", width=10, command=ListBuckets) \
             .grid(column=2, row=4, sticky='w', padx=2, pady=2)
 
-        Label(window, text="S3 Prefix").grid(column=0, row=5, sticky='w', padx=2, pady=2)
+        Label(window, text="Prefix").grid(column=0, row=5, sticky='w', padx=2, pady=2)
         S3Prefix_txt = Combobox(window, width=48)
         S3Prefix_txt.grid(column=1, row=5, sticky='w', padx=2, pady=2)
         S3Prefix_txt['values'] = S3Prefix
@@ -287,7 +291,7 @@ def set_config():
         MaxParallelFile_txt = Spinbox(window, from_=1, to=100, width=15, textvariable=var_f)
         MaxParallelFile_txt.grid(column=1, row=7, sticky='w', padx=2, pady=2)
 
-        Label(window, text="S3 StorageClass").grid(column=0, row=8, sticky='w', padx=2, pady=2)
+        Label(window, text="StorageClass").grid(column=0, row=8, sticky='w', padx=2, pady=2)
         StorageClass_txt = Combobox(window, width=15, state="readonly")
         StorageClass_txt['values'] = tuple(StorageClass_list)
         StorageClass_txt.grid(column=1, row=8, sticky='w', padx=2, pady=2)
