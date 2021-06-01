@@ -17,7 +17,10 @@ from pathlib import PurePosixPath, Path
 import platform
 import codecs
 from urllib.parse import unquote
+
+
 os.system("")  # workaround for some windows system to print color
+max_pool_connections = 200
 
 global JobType, SrcFileIndex, DesProfileName, DesBucket, S3Prefix, MaxRetry, MaxThread, \
     MaxParallelFile, StorageClass, ifVerifyMD5, DontAskMeToClean, LoggingLevel, \
@@ -179,16 +182,17 @@ def set_config():
             this_bucket = DesBucket_txt.get()
             max_get = 100
             try:
-                response = client.list_objects_v2(
+                response = client.list_objects(
                     Bucket=this_bucket,
-                    Delimiter='/'
-                )  # Only get the max 1000 prefix for simply list
+                    Delimiter='/',
+                    MaxKeys=100
+                )  # Only get the max max_get prefix for simply list
                 if 'CommonPrefixes' in response:
                     prefix_list = [c['Prefix'] for c in response['CommonPrefixes']]
                 if not prefix_list:
                     messagebox.showinfo('Message', f'There is no "/" Prefix in: {this_bucket}')
                 if response['IsTruncated']:
-                    messagebox.showinfo('Message', f'More than {max_get} Prefix, cannot fully list here.')
+                    messagebox.showinfo('Message', f'More than {max_get} Prefix, only show first page here.')
             except Exception as e:
                 messagebox.showinfo('Error', f'Cannot get prefix list from bucket: {this_bucket}, {str(e)}')
             S3Prefix_txt['values'] = prefix_list
@@ -793,7 +797,7 @@ def checkPartnumberList(srcfile, uploadId):
         )
         for page in response_iterator:
             if "Parts" in page:
-                logger.info(f'Got list_parts: {len(page["Parts"])} - {DesBucket}/{prefix_and_key}')
+                # logger.info(f'Got list_parts: {len(page["Parts"])} - {DesBucket}/{prefix_and_key}')
                 for p in page["Parts"]:
                     partnumberList.append(p["PartNumber"])
     except Exception as e:
@@ -1219,7 +1223,7 @@ if __name__ == '__main__':
     logger, log_file_name = set_log()
 
     # Define s3 client
-    s3_config = Config(max_pool_connections=200)
+    s3_config = Config(max_pool_connections=max_pool_connections)
     if des_endpoint_url == "AWS":
         s3_dest_client = Session(profile_name=DesProfileName).client('s3')
     else:
