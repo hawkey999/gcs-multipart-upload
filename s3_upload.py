@@ -924,9 +924,13 @@ def cal_md5list(*, indexList, srcfileKey, ChunkSize):
 
 # Single Thread Upload one part, from local to s3
 def uploadThread(*, uploadId, partnumber, partStartIndex, srcfileKey, total, md5list, dryrun, complete_list, ChunkSize):
-    prefix_and_key = str(PurePosixPath(S3Prefix) / srcfileKey)
     if not dryrun:
         print(f'\033[0;32;1m--->Uploading\033[0m {srcfileKey} - {partnumber}/{total}')
+    else:
+        if not ifVerifyMD5:
+            return
+    
+    prefix_and_key = str(PurePosixPath(S3Prefix) / srcfileKey)
     pstart_time = time.time()
     with open(os.path.join(SrcDir, srcfileKey), 'rb') as data:
         retryTime = 0
