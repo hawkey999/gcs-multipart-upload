@@ -16,6 +16,7 @@ import logging
 from pathlib import PurePosixPath, Path
 import platform
 import codecs
+from urllib.parse import unquote
 os.system("")  # workaround for some windows system to print color
 
 global JobType, SrcFileIndex, DesProfileName, DesBucket, S3Prefix, MaxRetry, MaxThread, \
@@ -433,15 +434,15 @@ def get_s3_file_list(*, s3_client, bucket, S3Prefix, no_prefix=False):
             )
             if "Contents" in response:
                 for n in response["Contents"]:
-                    key = n["Key"]
+                    key = unquote(n["Key"], encoding="UTF-8")
                     if no_prefix:
                         key = key[dp_len:]
                     __des_file_list.append({
                         "Key": key,
                         "Size": n["Size"]
                     })
-                if "NextMarker" in response:
-                    Marker = response["NextMarker"]
+            if "NextMarker" in response:
+                Marker = response["NextMarker"]
             IsTruncated = response["IsTruncated"]
         logger.info(f'Bucket list length：{str(len(__des_file_list))}')
     except Exception as err:
