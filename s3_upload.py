@@ -16,7 +16,7 @@ import logging
 from pathlib import PurePosixPath, Path
 import platform
 import codecs
-from urllib.parse import unquote
+from urllib.parse import unquote_plus
 
 
 os.system("")  # workaround for some windows system to print color
@@ -438,7 +438,7 @@ def get_s3_file_list(*, s3_client, bucket, S3Prefix, no_prefix=False):
             )
             if "Contents" in response:
                 for n in response["Contents"]:
-                    key = unquote(n["Key"], encoding="UTF-8")
+                    key = unquote_plus(n["Key"], encoding="UTF-8")
                     if no_prefix:
                         key = key[dp_len:]
                     __des_file_list.append({
@@ -1124,7 +1124,7 @@ def completeUpload(*, reponse_uploadId, srcfileKey, len_indexList):
         # 把 ETag 加入到 Part List
         for page in response_iterator:
             if "Parts" in page:
-                logger.info(f'Got list_parts: {len(page["Parts"])} - {DesBucket}/{prefix_and_key}')
+                logger.info(f'Got uploaded parts to verify: {len(page["Parts"])} - {DesBucket}/{prefix_and_key}')
                 for p in page["Parts"]:
                     uploadedListPartsClean.append({
                         "ETag": p["ETag"],
