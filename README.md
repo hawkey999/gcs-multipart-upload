@@ -61,7 +61,8 @@ On GUI, select local directory and target Bucket/Prefix, parallel upload file an
 ![GUI Config](./img/img04.png)
 Click "Start Upload" to start.  
 
-[win_exe_package](./win_exe_package) is ready for Windows customer, and no need to install python.
+[win_exe_package](./win_exe_package) is ready for Windows customer, and no need to install python.   
+Windows 绿色安装，解压并运行exe文件即可，不需要另外再装Python等依赖。  
 
 ## Detail Setup 详细设置  
 ### Setup Credential  
