@@ -4,7 +4,7 @@ JobType = LOCAL_TO_S3
 # 'LOCAL_TO_S3' | 'S3_TO_S3' | 'ALIOSS_TO_S3' 
 
 DesEndPointURL = https://storage.googleapis.com
-# 'AWS' | other vendor's url e.g. https://storage.googleapis.com or https://bucket.oss-cn-beijing.aliyuncs.com
+# Storage endpoint: 'AWS' | other vendor's url e.g. https://storage.googleapis.com or https://bucket.oss-cn-beijing.aliyuncs.com
 
 DesBucket = hzb-x-gcs
 # Destination S3 bucket name

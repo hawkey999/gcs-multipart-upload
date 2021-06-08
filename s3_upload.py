@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# PROJECT LONGARROW - GCS/S3 UPLOAD TOOL WITH BREAK-POINT RESUMING
 import os
 import sys
 import json
@@ -108,7 +107,7 @@ def set_config():
         pro_conf.read(cre_path)
         profile_list = pro_conf.sections()
     else:
-        print(f"There is no aws_access_key in {cre_path}, please input for Destination GCS/S3 Bucket: ")
+        print(f"There is no HMAC key in {cre_path}, please input for Destination GCS/S3 Bucket: ")
         if not os.path.exists(pro_path):
             os.mkdir(pro_path)
         aws_access_key_id = input('GCS HMAC Access key(or aws_access_key_id): ')
@@ -185,7 +184,7 @@ def set_config():
                 response = client.list_objects(
                     Bucket=this_bucket,
                     Delimiter='/',
-                    MaxKeys=100
+                    MaxKeys=max_get
                 )  # Only get the max max_get prefix for simply list
                 if 'CommonPrefixes' in response:
                     prefix_list = [c['Prefix'] for c in response['CommonPrefixes']]
@@ -673,7 +672,7 @@ def upload_file(*, srcfile, desFilelist, UploadIdList, ChunkSize_default):  # Up
     prefix_and_key = srcfile["Key"]
     if JobType == 'LOCAL_TO_S3':
         prefix_and_key = str(PurePosixPath(S3Prefix) / srcfile["Key"])
-    if srcfile['Size'] >= ChunkSize_default:
+    if srcfile['Size'] > ChunkSize_default * 2:
         try:
             # 循环重试3次（如果MD5计算的ETag不一致）
             for md5_retry in range(3):
@@ -1173,6 +1172,7 @@ def compare_local_to_s3():
                                    no_prefix=True)
     deltaList = []
     for source_file in fileList:
+        source_file["Key"] = str(PurePosixPath(source_file["Key"]))
         if source_file not in desFilelist:
             deltaList.append(source_file)
 
