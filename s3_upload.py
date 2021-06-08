@@ -379,7 +379,7 @@ def set_log():
 
 
 # Get local file list
-def get_local_file_list(str_key=False):
+def get_local_file_list():
     __src_file_list = []
     try:
         if SrcFileIndex == "*":
@@ -389,8 +389,6 @@ def get_local_file_list(str_key=False):
                     file_relativePath = file_absPath[len(SrcDir) + 1:]
                     file_size = os.path.getsize(file_absPath)
                     key = Path(file_relativePath)
-                    if str_key:
-                        key = str(key)
                     __src_file_list.append({
                         "Key": key,
                         "Size": file_size
@@ -1165,7 +1163,7 @@ def completeUpload(*, reponse_uploadId, srcfileKey, len_indexList):
 # Compare local file list and s3 list
 def compare_local_to_s3():
     logger.info('Comparing destination and source ...')
-    fileList = get_local_file_list(str_key=True)
+    fileList = get_local_file_list()
     desFilelist = get_s3_file_list(s3_client=s3_dest_client,
                                    bucket=DesBucket,
                                    S3Prefix=S3Prefix,
