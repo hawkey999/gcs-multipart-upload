@@ -27,8 +27,8 @@ Muliti-thread with multi-part Cloud Storage upload tool, breaking-point resume s
 * Support setup storage class: 'STANDARD', 'NEARLINE', 'COLDLINE', 'ARCHIVE', 'REDUCED_REDUNDANCY', 'STANDARD_IA', 'ONEZONE_IA', 'INTELLIGENT_TIERING', 'GLACIER', 'DEEP_ARCHIVE'   
 可设置存储级别，如：'STANDARD', 'NEARLINE', 'COLDLINE', 'ARCHIVE', 'REDUCED_REDUNDANCY', 'STANDARD_IA', 'ONEZONE_IA', 'INTELLIGENT_TIERING', 'GLACIER', 'DEEP_ARCHIVE'   
 
-* Support GUI  
-可启动图形界面  
+* Support GUI and Package exe for Windows user  
+可启动图形界面。并且已经打包了 exe 文件供 Windows 用户使用，无需安装 python 或依赖包。  
 
 * Can setup ouput info level  
 可设置输出消息级别，如设置WARNING级别，则只输出你最关注的信息。
@@ -60,6 +60,8 @@ On GUI, select local directory and target Bucket/Prefix, parallel upload file an
 在图形界面上，选择要上传的本地目录和目标Bucket/Prefix，并行文件数量，每个文件并发数量等。  
 ![GUI Config](./img/img04.png)
 Click "Start Upload" to start.  
+
+[win_exe_package](./win_exe_package) is ready for Windows customer, and no need to install python.
 
 ## Detail Setup 详细设置  
 ### Setup Credential  
