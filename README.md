@@ -50,6 +50,7 @@ Muliti-thread with multi-part Cloud Storage upload tool, breaking-point resume s
 
 
 ## Quick Start 快速使用  
+* UPLOAD  
 ```bash
 python3 gcs_upload.py --gui
 ```
@@ -64,10 +65,11 @@ Click "Start Upload" to start.
 [win_exe_package](./win_exe_package) is ready for Windows customer, and no need to install python.   
 Windows 绿色安装，解压并运行exe文件即可，不需要另外再装Python等依赖。  
 
-对于下载场景，使用
+* DOWNLOAD
 ```bash
 python3 gcs_download.py --gui
 ```
+
 
 ## Detail Setup 详细设置  
 ### Setup Credential  
@@ -149,13 +151,26 @@ https://bugs.python.org/issue37833
 https://stackoverflow.com/questions/57400301/how-to-fix-tkinter-every-code-with-gui-crashes-mac-os-with-respring    
 或不带 GUI 来运行 python3 gcs_upload.py --nogui。Windows 操作系统没有反馈有该问题。  
 
-### 实现中国大陆较稳定地网络访问GCS
-* 指定就近API地址。中国大陆可以直接访问到 GCS API(google cloud storage)，但很可能会解析到美国的API入口，本地 ping storage.googleapis.com 即可看到解析到哪个地址，以及时延。可以利用GCS API 全球分布的特性，在就近例如香港服务器上解析一个 nslookup storage.googleapis.com 的IP地址，然后写入到本地HOST文件中，以实现就近访问，加速上传。注：API所在地跟Bucket所在区域并无必然关联，就近访问API可以利用GCP骨干网的优势。正常情况访问API是会自动调度到就近的入口的，但中国大陆情况特殊。  
-HOST文件示例如下：   
-```
-sudo vi /etc/hosts
-    <Specified_GCS_IP> storage.googleapis.com
-```
+### 实现中国大陆较稳定地网络访问 GCS
+* 指定就近的 GCS 地址。  
+中国大陆可以直接访问到 GCS API(google cloud storage)，但很可能会解析到美国的API入口。  
+本地 ping storage.googleapis.com 即可看到解析到哪个地址，以及时延。可以利用 GCS API 全球分布的特性，在就近（例如香港的服务器）解析 nslookup storage.googleapis.com 的IP地址，然后写入到本地HOST文件中，以实现就近访问，加速上传。  
+注：API所在地跟Bucket所在区域并无必然关联，就近访问API可以利用GCP骨干网的优势，访问任何地区的GCS。正常情况访问API是会自动调度到就近的入口的，但中国大陆情况特殊，所以自己控制可以加速。    
+本项目提供了两个工具，帮你快速找到  
+1. 部署在云上（例如香港）的Cloud Function云函数服务 [cloudfunction_nslookup.py](./cloudfunction_nslookup.py) 访问即返回当地解析 storage.googleapis.com 的地址列表。考虑到大陆可能不能直接访问 Cloud Function 接口，可以在 Cloud Function 前面部署一个负载均衡，这样可以只访问这个负载均衡的IP。即：  
+Local --> Loadbalancer IP --> CloudFunction(HK)  
+IP List <-- CloudFunction(resolve storage IP List)  
+  
+2. 在本地同时 ping 所有 GCS IP ，返回速度最快的3个和它对应地理位置 [ping_choose_ip_for_gcs.py](./ping_choose_ip_for_gcs.py)    
+Ping 所用到的地址列表包括本地解析出来的，以及从云上 Cloud Function 获取到的远程解析。支持获取多个地区的 Cloud Function 的响应。因应网络变化，以及时间不同，IP时延会变化，所以时不时需要运行一下，更新最佳IP。  
+Local ping --> All GCS IPs  
+![img02.png](./img/img02.png)  
+修改本地 HOST 文件示例如下：   
+    ```
+    sudo vi /etc/hosts
+    142.250.66.144 storage.googleapis.com
+    ```
+
 * 启用TCP BBR。本地服务器启用TCP BBR拥塞管理协议可以更充分地利用带宽进行上传。
 
 ### NOTICE  注意:  

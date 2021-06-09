@@ -9,11 +9,14 @@ import json
 import socket
 from concurrent import futures
 ping_count = 5
+local_endpoint = "storage.googleapis.com"
+query_endpoints = ["my cloud function ip 1", "my cloud function ip 2"]  
+    # The access point of CloudFunction to nslookup on Cloud
 
 # Get Local nslookup 
 def getaddrinfo():
   local_list = set()
-  ais = socket.getaddrinfo("storage.googleapis.com",0,0,0,0)
+  ais = socket.getaddrinfo(local_endpoint,0,0,0,0)
   for result in ais:
     local_list.add(result[-1][0])
 #   print(str(ip_list))
@@ -21,13 +24,12 @@ def getaddrinfo():
 
 # Get region nslookup on CloudFunction
 IP_list = getaddrinfo()
-IP_list_endpoint = ["http://35.186.225.230", "http://130.211.47.54"]
-for endpoint in IP_list_endpoint:
+for endpoint in query_endpoints:
     try:
         response = requests.get(endpoint).text
         IP_list = IP_list | set(json.loads(json.dumps(eval(response))))
     except Exception as e:
-        print("Can't get resolve IPs from", endpoint)
+        print("Can't access query_endpoints from", endpoint)
 
 # PING IP add latency to list
 def ping_ip(ip):
