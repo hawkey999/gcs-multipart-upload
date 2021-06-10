@@ -203,7 +203,7 @@ def set_config():
         window.configure(background='#ECECEC')
         window.protocol("WM_DELETE_WINDOW", sys.exit)
 
-        Label(window, text="S3 Bucket").grid(column=0, row=1, sticky='w', padx=2, pady=2)
+        Label(window, text="GCS/S3 Bucket").grid(column=0, row=1, sticky='w', padx=2, pady=2)
         SrcBucket_txt = Combobox(window, width=48)
         SrcBucket_txt.grid(column=1, row=1, sticky='w', padx=2, pady=2)
         SrcBucket_txt['values'] = SrcBucket
@@ -211,7 +211,7 @@ def set_config():
         Button(window, text="List Buckets", width=10, command=ListBuckets) \
             .grid(column=2, row=1, sticky='w', padx=2, pady=2)
 
-        Label(window, text="S3 Prefix").grid(column=0, row=2, sticky='w', padx=2, pady=2)
+        Label(window, text="GCS/S3 Prefix").grid(column=0, row=2, sticky='w', padx=2, pady=2)
         S3Prefix_txt = Combobox(window, width=48)
         S3Prefix_txt.grid(column=1, row=2, sticky='w', padx=2, pady=2)
         S3Prefix_txt['values'] = S3Prefix
@@ -241,7 +241,7 @@ def set_config():
         SrcProfileName = SrcProfileName_txt.get()
         SrcProfileName_txt.bind("<<ComboboxSelected>>", ListBuckets)
 
-        Label(window, text="Folder").grid(column=0, row=5, sticky='w', padx=2, pady=2)
+        Label(window, text="Local Folder").grid(column=0, row=5, sticky='w', padx=2, pady=2)
         url_txt = Entry(window, width=50)
         url_txt.grid(column=1, row=5, sticky='w', padx=2, pady=2)
         url_btn = Button(window, text="Select Folder", width=10, command=browse_folder)

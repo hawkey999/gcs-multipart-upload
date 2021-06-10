@@ -69,7 +69,7 @@ Windows 绿色安装，解压并运行exe文件即可，不需要另外再装Pyt
 ```bash
 python3 gcs_download.py --gui
 ```
-
+![GUI Config](./img/download.png)
 
 ## Detail Setup 详细设置  
 ### Setup Credential  

@@ -236,7 +236,7 @@ def set_config():
             JobType_mode.current(0)
         JobType_mode.bind("<<ComboboxSelected>>", job_change)
 
-        Label(window, text="Folder").grid(column=0, row=1, sticky='w', padx=2, pady=2)
+        Label(window, text="Local Folder").grid(column=0, row=1, sticky='w', padx=2, pady=2)
         url_txt = Entry(window, width=50)
         url_txt.grid(column=1, row=1, sticky='w', padx=2, pady=2)
         url_btn = Button(window, text="Select Folder", width=10, command=browse_folder)
@@ -262,7 +262,7 @@ def set_config():
         DesProfileName = DesProfileName_txt.get()
         DesProfileName_txt.bind("<<ComboboxSelected>>", ListBuckets)
 
-        Label(window, text="Bucket").grid(column=0, row=4, sticky='w', padx=2, pady=2)
+        Label(window, text="GCS/S3 Bucket").grid(column=0, row=4, sticky='w', padx=2, pady=2)
         DesBucket_txt = Combobox(window, width=48)
         DesBucket_txt.grid(column=1, row=4, sticky='w', padx=2, pady=2)
         DesBucket_txt['values'] = DesBucket
@@ -270,7 +270,7 @@ def set_config():
         Button(window, text="List Buckets", width=10, command=ListBuckets) \
             .grid(column=2, row=4, sticky='w', padx=2, pady=2)
 
-        Label(window, text="Prefix").grid(column=0, row=5, sticky='w', padx=2, pady=2)
+        Label(window, text="GCS/S3 Prefix").grid(column=0, row=5, sticky='w', padx=2, pady=2)
         S3Prefix_txt = Combobox(window, width=48)
         S3Prefix_txt.grid(column=1, row=5, sticky='w', padx=2, pady=2)
         S3Prefix_txt['values'] = S3Prefix
