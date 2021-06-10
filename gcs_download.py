@@ -349,7 +349,7 @@ def get_s3_file_list(s3_client, bucket):
                         "Size": n["Size"]
                     })
             if "NextMarker" in response:
-                Marker = response["NextMarker"]
+                Marker = unquote_plus(response["NextMarker"], encoding="UTF-8")
             IsTruncated = response["IsTruncated"]
         logger.info(f'Bucket list length：{str(len(__des_file_list))}')
     except Exception as err:
