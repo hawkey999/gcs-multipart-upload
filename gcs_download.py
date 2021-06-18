@@ -35,7 +35,8 @@ def set_config():
         gui = True
     if '--nogui' in sys.argv:  # 带 nogui 就覆盖前面Win打开要求
         gui = False
-
+    gui = True  # TODO:
+    
     config_file = os.path.join(file_path, 'gcs_download_config.ini')
     # If no config file, read the default config
     if not os.path.exists(config_file):
@@ -137,7 +138,7 @@ def set_config():
                     MaxKeys=max_get
                 )  # Only get the max max_get prefix for simply list
                 if 'CommonPrefixes' in response:
-                    prefix_list = [c['Prefix'] for c in response['CommonPrefixes']]
+                    prefix_list = [unquote_plus(c['Prefix'], encoding="UTF-8") for c in response['CommonPrefixes']]
                 if not prefix_list:
                     messagebox.showinfo('Message', f'There is no "/" Prefix in: {this_bucket}')
                 if response['IsTruncated']:
@@ -171,7 +172,7 @@ def set_config():
                     dp_len = len(str(PurePosixPath(S3Prefix)))+1
 
                 if 'Contents' in response:
-                    file_list = [c['Key'][dp_len:] for c in response['Contents']]  # 去掉Prefix
+                    file_list = [unquote_plus(c['Key'], encoding="UTF-8")[dp_len:] for c in response['Contents']]  # 去掉Prefix
                 if not file_list:
                     messagebox.showinfo('Message', f'There is no files in s3://{this_bucket}/{S3Prefix}')
                 if response['IsTruncated']:

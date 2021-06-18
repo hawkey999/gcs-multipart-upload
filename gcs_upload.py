@@ -187,7 +187,7 @@ def set_config():
                     MaxKeys=max_get
                 )  # Only get the max max_get prefix for simply list
                 if 'CommonPrefixes' in response:
-                    prefix_list = [c['Prefix'] for c in response['CommonPrefixes']]
+                    prefix_list = [unquote_plus(c['Prefix'], encoding="UTF-8") for c in response['CommonPrefixes']]
                 if not prefix_list:
                     messagebox.showinfo('Message', f'There is no "/" Prefix in: {this_bucket}')
                 if response['IsTruncated']:
