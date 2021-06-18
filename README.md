@@ -3,7 +3,7 @@
 Muliti-thread with multi-part Cloud Storage upload tool, breaking-point resume supported, suitable for large files in parallel, support GCS/S3/OSS and others S3 compitable API  
 对象存储多线程断点续传，适合大批量的大文件传输，支持谷歌GCS/AWS S3/阿里OSS等各种S3兼容接口  
 
-### Features:  
+## Features:  
 具体功能包括：  
 
 * Split multipart and get from source, multi-thread upload to GCS/S3 and merge, support resume upload (Part level).   
@@ -48,24 +48,29 @@ Muliti-thread with multi-part Cloud Storage upload tool, breaking-point resume s
     pip install -r requirements.txt --user
 ```
 
+### Optional 可选绿色安装包
+[win_exe_package](./win_exe_package) is ready for Windows customer, unzip and run. No need to install python.   
+Windows 绿色安装，解压Zip并运行exe文件即可，不需要装Python等依赖。  
 
 ## Quick Start 快速使用  
-* UPLOAD  
+### UPLOAD  
 ```bash
 python3 gcs_upload.py --gui
 ```
 Run above command. If you haven't input any HMAC key, then follow the hints to input Access_key/Secret:    
 用以上命令启动应用程序，如果没有设置过HMAC密钥，则按提示输入密钥 Access_key/Secret 如下图:    
-![credential](./img/img03.png)
+  
+![credential](./img/img03.png)  
+  
 On GUI, select local directory and target Bucket/Prefix, parallel upload file and concurrent threads per file.   
 在图形界面上，选择要上传的本地目录和目标Bucket/Prefix，并行文件数量，每个文件并发数量等。  
-![GUI Config](./img/img04.png)
+  
+![GUI Config](./img/img04.png)  
+  
 Click "Start Upload" to start.  
 
-[win_exe_package](./win_exe_package) is ready for Windows customer, and no need to install python.   
-Windows 绿色安装，解压并运行exe文件即可，不需要另外再装Python等依赖。  
 
-* DOWNLOAD
+### DOWNLOAD
 ```bash
 python3 gcs_download.py --gui
 ```
