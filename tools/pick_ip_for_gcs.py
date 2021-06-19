@@ -1,16 +1,16 @@
 """
 This tool is to help to fast nslookup storage.googleapis.com IPs
-Concurrntly ping and find the top 3 IPs
+Concurrntly curl and find the top 3 IPs
 Query the IP for location.
 """
-import ping3
 import requests
 import json
 import socket
 from concurrent import futures
+import time
 ping_count = 10
 local_endpoint = "storage.googleapis.com"
-query_endpoints = ["http://<Your query service IP>"]  
+query_endpoints = ["http://34.92.145.231"]
     # The access point of CloudFunction to nslookup on Cloud. Can be a list of url.
 
 # Get region nslookup on CloudFunction
@@ -23,7 +23,7 @@ for endpoint in query_endpoints:
         print("Can't access query_endpoints from", endpoint)
 print(f"Got {len(IP_list)} IP from remote")
 print("If you need to resolve IP locally, please remove the IP record of storage.googleapis.com in your local HOST file")
-input("Press any key to resolve IP locally, and start PING")
+input("PRESS ENTER to resolve IP locally, and start PING")
 
 
 # Get Local nslookup 
@@ -37,28 +37,22 @@ def getaddrinfo():
 
 IP_list = IP_list | getaddrinfo()
 
-# PING IP add latency to list
+# Curl IP add latency to list
 def ping_ip(ip):
     global latency_list
     sum_latency = 0
-    succuess_count = 0
     for i in range(ping_count):
-        latency = ping3.ping(ip, timeout=0.5, unit="ms")
-        if latency == None:
-            continue
+        t0 = time.time()
+        requests.get("http://"+ip, timeout=3)
+        latency = int((time.time() - t0)*1000)
         print(ip, "    ", latency, "ms")
         sum_latency += latency
-        succuess_count += 1
-    if succuess_count >= ping_count - 1:  
-        avg_lantency = int(sum_latency / succuess_count )
-        latency_list.append((ip, avg_lantency))
-    else:
-        # Loss more than 1 ping, then skip this ip
-        avg_lantency = None
+    avg_lantency = int(sum_latency / ping_count )
+    latency_list.append((ip, avg_lantency))
 
 global latency_list
 latency_list = []
-print(f"PING: IP {ping_count} times")
+print(f"HTTP GET: IP {ping_count} times")
 with futures.ThreadPoolExecutor(max_workers=15) as pool:
     for ip in IP_list:
         if ":" in ip:
